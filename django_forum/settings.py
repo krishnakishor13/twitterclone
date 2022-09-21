@@ -31,6 +31,11 @@ SECRET_KEY = 'django-insecure-#kuji!fz6%wh6$c8!=1275fmd3yz5lnw5$*_(5oeyat)tl^w++
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+X_FRAME_OPTIONS = '*'
+CORS_ORIGIN_ALLOW_ALL = True
+CSRF_TRUSTED_ORIGINS = [
+    'http://0.0.0.0:3000',
+]
 
 # Application definition
 
@@ -43,9 +48,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'posts',
     'cloudinary',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -80,14 +87,20 @@ WSGI_APPLICATION = 'django_forum.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         "ENGINE" : "django.db.backends.postgresql",
+#         "NAME" : "daprdr9sb8kset",
+#         "USER" :"kgimjwxpgfyuwi",
+#         "HOST" :"ec2-23-22-243-103.compute-1.amazonaws.com",
+#         "PORT" : 5432,
+#         "PASSWORD" :"cc030f69ce6138b4de6f0cee8a3c3766fabfaab4435bc73748b0d5448f634bbd",
+#     }
+# }
 DATABASES = {
     'default': {
-        "ENGINE" : "django.db.backends.postgresql",
-        "NAME" : "daprdr9sb8kset",
-        "USER" :"kgimjwxpgfyuwi",
-        "HOST" :"ec2-23-22-243-103.compute-1.amazonaws.com",
-        "PORT" : 5432,
-        "PASSWORD" :"cc030f69ce6138b4de6f0cee8a3c3766fabfaab4435bc73748b0d5448f634bbd",
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -139,10 +152,16 @@ cloudinary.config(
 
 
 STATICFILES_DIRS = [BASE_DIR / 'static']
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
